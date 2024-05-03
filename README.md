@@ -1,10 +1,10 @@
-# Terminal-Tetris
+# Terminal-Tetris PT-BR
 
-Instructions to run:
+Mudanças:
 --------------------
 
- - Fire up the terminal
- - cd to the directory where play_tetris.py is located
- - run `python3 play_tetris.py` (Yes, please make sure you're running with Python 3)
- - Follow on screen instructions to play the game
+ - Tradução do texto para o português brasileiro
+ - Comandos simplificados para o WASD
+ - Grid 10x20 (padrão)
+ - Jogabilidade facilitada (sem quedas indesejadas)
 
