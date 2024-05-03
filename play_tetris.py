@@ -1,17 +1,3 @@
-#!/usr/bin/python
-
-"""
-Python implementation of text-mode version of the Tetris game
-
-Quick play instructions:
-
- - a (return): move piece left
- - d (return): move piece right
- - w (return): rotate piece counter clockwise
- - s (return): rotate piece clockwise
- - e (return): just move the piece downwards as is
-
-"""
 
 import os
 import random
@@ -20,7 +6,7 @@ import sys
 from copy import deepcopy
 
 # DECLARE ALL THE CONSTANTS
-BOARD_SIZE = 20
+BOARD_SIZE = 10
 # Extra two are for the walls, playing area will have size as BOARD_SIZE
 EFF_BOARD_SIZE = BOARD_SIZE + 2
 
@@ -48,10 +34,10 @@ PIECES = [
 # Constants for user input
 MOVE_LEFT = 'a'
 MOVE_RIGHT = 'd'
-ROTATE_ANTICLOCKWISE = 'w'
-ROTATE_CLOCKWISE = 's'
-NO_MOVE = 'e'
-QUIT_GAME = 'q'
+ROTATE_ANTICLOCKWISE = 'antihorario'
+ROTATE_CLOCKWISE = 'w'
+NO_MOVE = "s"
+QUIT_GAME = 'sair'
 
 def print_board(board, curr_piece, piece_pos, error_message=''):
     """
@@ -68,7 +54,7 @@ def print_board(board, curr_piece, piece_pos, error_message=''):
     If there are any error messages then prints them to STDOUT as well
     """
     os.system('cls' if os.name=='nt' else 'clear')
-    print("Text mode version of the TETRIS game\n\n")
+    print("Tetris no Terminal\n\nInstruções: Use WASD para mover\n\n************")
 
     board_copy = deepcopy(board)
     curr_piece_size_x = len(curr_piece)
@@ -86,21 +72,8 @@ def print_board(board, curr_piece, piece_pos, error_message=''):
                 print(" ", end='')
         print("")
 
-    print("Quick play instructions:\n")
-    print(" - a (return): move piece left")
-    print(" - d (return): move piece right")
-    print(" - w (return): rotate piece counter clockwise")
-    print(" - s (return): rotate piece clockwise")
-
-    # In case user doesn't want to alter the position of the piece
-    # and he doesn't want to rotate the piece either and just wants to move
-    # in the downward direction, he can choose 'f'
-    print(" - e (return): just move the piece downwards as is")
-    print(" - q (return): to quit the game anytime")
-
     if error_message:
         print(error_message)
-    print("Your move:",)
 
 
 def init_board():
@@ -438,28 +411,6 @@ def can_rotate_clockwise(board, curr_piece, piece_pos):
 
 def play_game():
 
-    """
-    Parameters:
-    -----------
-    None
-
-    Returns:
-    --------
-    None
-
-    Details:
-    --------
-    - Initializes the game
-    - Reads player move from the STDIN
-    - Checks for the move validity
-    - Continues the gameplay if valid move, else prints out error msg
-      without changing the board
-    - Fixes the piece position on board if it cannot be moved
-    - Pops in new piece on top of the board
-    - Quits if no valid moves and possible for a new piece
-    - Quits in case user wants to quit
-
-    """
 
     # Initialize the game board, piece and piece position
     board = init_board()
@@ -469,40 +420,42 @@ def play_game():
 
     # Get player move from STDIN
     player_move = input()
+    
+    
     while (not is_game_over(board, curr_piece, piece_pos)):
         ERR_MSG = ""
         do_move_down = False
         if player_move == MOVE_LEFT:
             if can_move_left(board, curr_piece, piece_pos):
                 piece_pos = get_left_move(piece_pos)
-                do_move_down = True
+                do_move_down = False
             else:
-                ERR_MSG = "Cannot move left!"
+                ERR_MSG = "Movimento inválido"
         elif player_move == MOVE_RIGHT:
             if can_move_right(board, curr_piece, piece_pos):
                 piece_pos = get_right_move(piece_pos)
-                do_move_down = True
+                do_move_down = False
             else:
-                ERR_MSG = "Cannot move right!"
+                ERR_MSG = "Movimento inválido"
         elif player_move == ROTATE_ANTICLOCKWISE:
             if can_rotate_anticlockwise(board, curr_piece, piece_pos):
                 curr_piece = rotate_anticlockwise(curr_piece)
                 do_move_down = True
             else:
-                ERR_MSG = "Cannot rotate anti-clockwise !"
+                ERR_MSG = "Movimento inválido"
         elif player_move == ROTATE_CLOCKWISE:
             if can_rotate_clockwise(board, curr_piece, piece_pos):
                 curr_piece = rotate_clockwise(curr_piece)
-                do_move_down = True
+                do_move_down = False
             else:
-                ERR_MSG = "Cannot rotate clockwise!"
+                ERR_MSG = "Movimento inválido"
         elif player_move == NO_MOVE:
             do_move_down = True
         elif player_move == QUIT_GAME:
-            print("Bye. Thank you for playing!")
+            print("Até a próxima")
             sys.exit(0)
         else:
-            ERR_MSG = "That is not a valid move!"
+            ERR_MSG = "Movimento inválido!"
 
         if do_move_down and can_move_down(board, curr_piece, piece_pos):
             piece_pos = get_down_move(piece_pos)
@@ -520,7 +473,7 @@ def play_game():
         # Get player move from STDIN
         player_move = input()
 
-    print("GAME OVER!")
+    print("Fim de Jogo!")
 
 if __name__ == "__main__":
     play_game()
